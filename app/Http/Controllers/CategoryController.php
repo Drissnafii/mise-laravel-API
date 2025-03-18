@@ -12,8 +12,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('category.create');
-    }
+        $catego = category::all();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'category created successfully',
+            'data' => $catego
+        ], 201);    }
 
     /**
      * Show the form for creating a new resource.
@@ -32,11 +36,15 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        Category::create([
+        $catego = Category::create([
             'name' => $request->name,
         ]);
 
-        return redirect()->route('category.index')->with('success', 'Category created succesfully');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'category created successfully',
+            'data' => $catego
+        ], 201);
     }
 
 
@@ -51,11 +59,6 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
-    {
-        $category = Category::findOrFail($id);
-        return view('category.edit', compact('category'));
-    }
 
 
     /**
@@ -63,17 +66,23 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $catego = Category::find($id);
+
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $category = Category::findOrFail($id);
-        $category->update([
+        $catego->update([
             'name' => $request->name,
         ]);
 
-        return redirect()->route('category.index')->with('success', 'category updated successfly');
-    }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'category updated successfully',
+            'data' => $catego
+        ], 200); //ddskdjskjd
+
+        }
 
 
     /**
@@ -81,10 +90,15 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
+        $catego = Category::find($id);
+        $catego->delete();
 
-        return redirect()->route('category.index')->with('success', 'category is deleted ');
-    }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'category deleted successfully',
+            'data' => $catego
+        ], 200); // the code of delede should be added IDK it :/
+
+        }
 
 }
